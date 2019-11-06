@@ -1,1 +1,1 @@
-# Proditor
+# pseudo-SO
