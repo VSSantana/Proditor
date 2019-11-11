@@ -76,14 +76,14 @@ class Impressao:
         """
         print('\ndispatcher =>')
         print('\tPID:\t\t {}'.format(processo.pid))
+        print('\tpriority:\t {}'.format(processo.prioridade))
         print('\toffset:\t\t {}'.format(processo.posicao_bloco_disco))
         print('\tblocks:\t\t {}'.format(processo.bloco_memoria))
-        print('\tpriority:\t {}'.format(processo.prioridade))
-        print('\ttime:\t\t {}'.format(processo.tempo_processador))
         print('\tprinters:\t {}'.format(bool(processo.codigo_impressora)))
         print('\tscanners:\t {}'.format(bool(processo.scanner)))
         print('\tmodems:\t\t {}'.format(bool(processo.modem)))
-        print('\tdrives:\t\t {}'.format(bool(processo.codigo_disco)))
+        print('\tdrivers:\t\t {}'.format(bool(processo.codigo_disco)))
+        print('\ttime:\t\t {}'.format(processo.tempo_processador))
 
     def imprimir_log(self):
         """

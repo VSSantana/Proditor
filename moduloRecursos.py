@@ -36,15 +36,15 @@ class Recurso:
         if (processo.codigo_disco == 2) and (self.codigo_disco[1] is not None):
             recurso = False
         if recurso:
-            if(processo.scanner == 1):
+            if processo.scanner == 1:
                 self.scanner[0] = True
-            if(processo.codigo_impressora == 1):
+            if processo.codigo_impressora == 1:
                 self.codigo_impressora[0] = True
-            if(processo.modem == 1):
+            if processo.modem == 1:
                 self.modem[0] = True
-            if(processo.codigo_disco == 1):
+            if processo.codigo_disco == 1:
                 self.codigo_disco[0] = True
-            if(processo.codigo_disco == 2):
+            if processo.codigo_disco == 2:
                 self.codigo_disco[1] = True
         return recurso
 

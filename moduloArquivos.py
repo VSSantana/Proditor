@@ -23,7 +23,7 @@ class Arquivo:
         """
             Método responsável por retornar uma string mensagem
         """
-        return ("| {} ".format(self.nome_arquivo))
+        return "| {} ".format(self.nome_arquivo)
 
 
 class GerenciadorArquivos:
@@ -48,7 +48,7 @@ class GerenciadorArquivos:
             for i in range(0, len(self.lista_blocos_disco)):
                 posicao_inicial = int(linha[1])
                 posicao_final = posicao_inicial + int(linha[2]) - 1
-                if ((i >= posicao_inicial)and (i <= posicao_final)):
+                if (i >= posicao_inicial)and (i <= posicao_final):
                     self.lista_blocos_disco[i].posicao_bloco = posicao_inicial
                     self.lista_blocos_disco[i].nome_arquivo = linha[0]
                     self.lista_blocos_disco[i].tamanho = posicao_final - posicao_inicial + 1
@@ -81,7 +81,7 @@ class GerenciadorArquivos:
 
             for i in range(0, self.tamanho_blocos_disco):
                 
-                if(self.lista_blocos_disco[i].nome_arquivo == 0):
+                if self.lista_blocos_disco[i].nome_arquivo == 0:
                     dispobilidade += 1
                   
                     if dispobilidade == tamanho_arquivo:
@@ -106,10 +106,10 @@ class GerenciadorArquivos:
         elif operacao == 1:  # Deletar arquivo
             numero_operacao_processo_atual = processo.lista_instrucoes[sequencia_geral][3]
             for i in range(0, self.tamanho_blocos_disco):
-                if(self.lista_blocos_disco[i].nome_arquivo == nome_arquivo):
+                if self.lista_blocos_disco[i].nome_arquivo == nome_arquivo:
                    
                     #
-                    if((processo.pid == self.lista_blocos_disco[i].criador) or processo.prioridade == 0):
+                    if (processo.pid == self.lista_blocos_disco[i].criador) or processo.prioridade == 0:
                         tamanho_arquivo = self.lista_blocos_disco[i].tamanho
                         self.lista_blocos_disco[i:i + tamanho_arquivo] = tamanho_arquivo * [Arquivo()]
                       
@@ -120,12 +120,13 @@ class GerenciadorArquivos:
                     else:
                         mensagem = "P{} instruction {}".format(processo.pid, numero_operacao_processo_atual)
                         mensagem += " - Falha!\n"
-                        mensagem += "O processo {} não pode deletar o arquivo {} porque não existe esse arquivo.\n".format(processo.pid, nome_arquivo)
+                        mensagem += "O processo {} não pode deletar o arquivo {} porque não existe esse arquivo.\n".\
+                            format(processo.pid, nome_arquivo)
                 else:
                     mensagem = "P{} instruction {}".format(processo.pid, numero_operacao_processo_atual)
                     mensagem += " - Falha!\n"
-                    mensagem += "O processo {}: não pode deletar o arquivo {} porque não existe esse arquivo.\n".format(processo.pid, nome_arquivo)
+                    mensagem += "O processo {}: não pode deletar o arquivo {} porque não existe esse arquivo.\n".\
+                        format(processo.pid, nome_arquivo)
             return mensagem
         else:
             return "Operacao nao existente"
-

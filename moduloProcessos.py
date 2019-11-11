@@ -4,7 +4,7 @@
     Basicamente, mantém informações específicas do processo.
 """
 
-from moduloMemoria  import Memoria
+from moduloMemoria import Memoria
 from moduloArquivos import GerenciadorArquivos
 from moduloRecursos import Recurso
 from moduloFilas import Fila
@@ -42,12 +42,14 @@ class Processo:
         """
         for linha in lista_instrucoes:
             instrucao = linha.split(',')
-            if (self.pid == int(instrucao[0])):
+            if self.pid == int(instrucao[0]):
                 # codigo de operação = 0 criar  ou  1 deletar
-                if (int(instrucao[1]) == 0):
-                    self.lista_instrucoes.append([int(instrucao[0]), int(instrucao[1]), instrucao[2][1], int(instrucao[3]), int(instrucao[4]) ])
+                if int(instrucao[1]) == 0:
+                    self.lista_instrucoes.append([int(instrucao[0]), int(instrucao[1]), instrucao[2][1],
+                                                  int(instrucao[3]), int(instrucao[4])])
                 else:
-                    self.lista_instrucoes.append([int(instrucao[0]), int(instrucao[1]), instrucao[2][1], int(instrucao[3])])
+                    self.lista_instrucoes.append([int(instrucao[0]), int(instrucao[1]), instrucao[2][1],
+                                                  int(instrucao[3])])
 
 
 class GerenciadorProcessos:
@@ -78,10 +80,10 @@ class GerenciadorProcessos:
         lista_processo_analisados = []
     
         for processo in self.fila.lista_processo_pronto:       
-            if ((processo.bloco_memoria > TAMANHO_PROCESSO_REAL) and (processo.prioridade == 0)):
+            if (processo.bloco_memoria > TAMANHO_PROCESSO_REAL) and (processo.prioridade == 0):
                 pass
             
-            elif ((processo.bloco_memoria > TAMANHO_PROCESSO_USUARIO) and (processo.prioridade != 0)):
+            elif (processo.bloco_memoria > TAMANHO_PROCESSO_USUARIO) and (processo.prioridade != 0):
                 pass
             
             else:        
@@ -113,28 +115,37 @@ class GerenciadorProcessos:
         """
         quantidade_processo_usuario_executado = 0
         quantidade_processo_sistema_excutado = 0   
-        tempo_execucao = 0;
-        while(True):
+        tempo_execucao = 0
+        while True:
             self.fila.inicializar_fila()
         
             # ordena a fila de prioridade dos processos
             self.fila.ordenar_filas_prioridade(tempo_execucao)
          
-            # altera prioridade dos processos que estão esperando muito para serem executado na fila de prioridade de usuário.
+            # altera prioridade dos processos que estão esperando muito para serem executado na fila de prioridade de
+            # usuário.
             self.fila.alterar_fila_prioridade_usuario(tempo_execucao)
            
             # adiciona os processos na fila de processos de real e de usuario
            
             lista_processo_0_espera = self.memoria.verificar_disponibilidade_memoria_real(self.fila, self.recurso)   
-            lista_processo_1_espera = self.memoria.verificar_disponibilidade_memoria_recurso_usuario(self.fila, self.recurso, tipo_lista=1)   
-            lista_processo_2_espera = self.memoria.verificar_disponibilidade_memoria_recurso_usuario(self.fila, self.recurso, tipo_lista=2)    
-            lista_processo_3_espera = self.memoria.verificar_disponibilidade_memoria_recurso_usuario(self.fila, self.recurso, tipo_lista=3)   
+            lista_processo_1_espera = self.memoria.verificar_disponibilidade_memoria_recurso_usuario(self.fila,
+                                                                                                     self.recurso,
+                                                                                                     tipo_lista=1)
+            lista_processo_2_espera = self.memoria.verificar_disponibilidade_memoria_recurso_usuario(self.fila,
+                                                                                                     self.recurso,
+                                                                                                     tipo_lista=2)
+            lista_processo_3_espera = self.memoria.verificar_disponibilidade_memoria_recurso_usuario(self.fila,
+                                                                                                     self.recurso,
+                                                                                                     tipo_lista=3)
             
             if len(self.fila.lista_processo_sistema_execucao) > 0:
-                quantidade_processo_sistema_excutado += self.executar_operacao_processo(self.fila.lista_processo_sistema_execucao)
+                quantidade_processo_sistema_excutado += self.executar_operacao_processo(
+                    self.fila.lista_processo_sistema_execucao)
             
             if len(self.fila.lista_processo_usuario_execucao) > 0:
-                quantidade_processo_usuario_executado += self.executar_operacao_processo(self.fila.lista_processo_usuario_execucao)
+                quantidade_processo_usuario_executado += self.executar_operacao_processo(
+                    self.fila.lista_processo_usuario_execucao)
             
             # limpa a memoria de usuario
             self.memoria.liberar_memoria_usuario()
@@ -145,17 +156,20 @@ class GerenciadorProcessos:
             # aumenta o tempo de execução
             tempo_execucao += 1
             
-            if (len(lista_processo_0_espera) > 0  or len(lista_processo_1_espera) > 0  or len(lista_processo_2_espera) > 0 or len(lista_processo_3_espera) > 0):
+            if len(lista_processo_0_espera) > 0 or len(lista_processo_1_espera) > 0 or len(lista_processo_2_espera) \
+                    > 0 or len(lista_processo_3_espera) > 0:
                 self.fila.lista_processo_pronto = []
                 self.fila.lista_processo_pronto.extend(lista_processo_0_espera)
                 self.fila.lista_processo_pronto.extend(lista_processo_1_espera)
                 self.fila.lista_processo_pronto.extend(lista_processo_2_espera)
                 self.fila.lista_processo_pronto.extend(lista_processo_3_espera)
              
-            if(self.quantidade_processo == (quantidade_processo_sistema_excutado + quantidade_processo_usuario_executado)):
+            if self.quantidade_processo == (quantidade_processo_sistema_excutado +
+                                            quantidade_processo_usuario_executado):
                 break
             
-            if((quantidade_processo_sistema_excutado + quantidade_processo_usuario_executado) >= TAMANHO_MAXIMO_PROCESSOS):
+            if (quantidade_processo_sistema_excutado + quantidade_processo_usuario_executado) \
+                    >= TAMANHO_MAXIMO_PROCESSOS:
                 break
              
         self.impressao.imprimir_mapa_disco(self.gerenciador_arquivo) 
@@ -165,18 +179,18 @@ class GerenciadorProcessos:
             Responsável por executar_operacao processos de tempo-real
         """
         quantidade_processo_executado = 0
-        contador = 0;
+        contador = 0
         
         for processo in lista_processo_pronto:  
             quantidade_processo_executado += 1
-            sequencia_execucao = 0;
+            sequencia_execucao = 0
             self.impressao.imprimir_dispatcher(processo)
             self.impressao.log_operacao.clear()
             print("\nProcesso {}\n".format(processo.pid))
             print("P{} STARTED\n".format(processo.pid))
             for instrucao in processo.lista_instrucoes:
               
-                if (sequencia_execucao <= len(instrucao)):
+                if sequencia_execucao <= len(instrucao):
                    
                     if sequencia_execucao >= processo.tempo_processador:
                         numero_operacao_processo = processo.lista_instrucoes[sequencia_execucao][4]
@@ -184,13 +198,13 @@ class GerenciadorProcessos:
                         mensagem += " - Falha!\n"
                         mensagem += "O processo {} esgotou o seu tempo de CPU!\n".format(processo.pid)
                         self.impressao.log_operacao.append(mensagem)
-                    else : 
+                    else:
                         instrucao = processo.lista_instrucoes[sequencia_execucao][1]
                        
-                        if (instrucao == 0):
+                        if instrucao == 0:
                             numero_operacao_processo = processo.lista_instrucoes[sequencia_execucao][4]
                             
-                            if (numero_operacao_processo != sequencia_execucao + contador):
+                            if numero_operacao_processo != sequencia_execucao + contador:
                                 contador = 1
                                 mensagem_cpu = "P{} instruction {}".format(processo.pid, sequencia_execucao)
                                 mensagem_cpu += " - Sucesso CPU!\n"
@@ -198,7 +212,7 @@ class GerenciadorProcessos:
                         else:
                             numero_operacao_processo = processo.lista_instrucoes[sequencia_execucao][3]
                            
-                            if (numero_operacao_processo != sequencia_execucao + contador):
+                            if numero_operacao_processo != sequencia_execucao + contador:
                                 contador = 1
                                 mensagem_cpu = "P{} instruction {}".format(processo.pid, sequencia_execucao)
                                 mensagem_cpu += " - Sucesso CPU!\n"   
@@ -214,4 +228,3 @@ class GerenciadorProcessos:
             self.memoria.liberar_memoria_sistema(processo)
         
         return quantidade_processo_executado
-
