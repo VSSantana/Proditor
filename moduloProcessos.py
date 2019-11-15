@@ -1,9 +1,10 @@
 """
-    Módulo responsável pelo gerenciamento da processos.
+    Módulo responsável pelo gerenciamento de processos.
     Classes e estruturas de dados relativas ao processo. 
     Basicamente, mantém informações específicas do processo.
 """
 
+import sys
 from moduloMemoria import Memoria
 from moduloArquivos import GerenciadorArquivos
 from moduloRecursos import Recurso
@@ -16,14 +17,12 @@ TAMANHO_PROCESSO_USUARIO = 960
 
 
 class Processo:
-    """
-        Classe responsável por carregamento de dados dos processos.
-    """
+
+    # Classe responsável por carregamento de dados dos processos.
 
     def __init__(self, processo):
-        """
-            Construtor da classe de Processo
-        """
+
+        #Construtor da classe de Processo.
         self.tempo_inicializacao = processo[0]
         self.prioridade = processo[1]
         self.tempo_processador = processo[2]
@@ -37,13 +36,13 @@ class Processo:
 
     def setar_instrucao(self, lista_instrucoes):
         """
-            Metódo responsável por receber uma de operações
-            e fazer referência ao processo corrente
+            Metódo responsável por receber uma lista de operações
+            e fazer referência ao processo corrente.
         """
         for linha in lista_instrucoes:
             instrucao = linha.split(',')
             if self.pid == int(instrucao[0]):
-                # codigo de operação = 0 criar  ou  1 deletar
+                # Cóodigo de operação = 0 criar  ou  1 deletar.
                 if int(instrucao[1]) == 0:
                     self.lista_instrucoes.append([int(instrucao[0]), int(instrucao[1]), instrucao[2][1],
                                                   int(instrucao[3]), int(instrucao[4])])
@@ -55,15 +54,15 @@ class Processo:
 class GerenciadorProcessos:
     
     """
-        Classe responsável por manipulação de processos executar_operacao processos,
+        Classe responsável por manipulação de processos, executar_operacao de processos,
         adicionar/remover/alterar/ordenar processos na fila de prioridade e
         verificar disponibilidade de recursos e memoria.
     """
 
     def __init__(self):
-        """
-            Construtor da classe de GerenciadorProcessos
-        """
+
+        # Construtor da classe de GerenciadorProcessos
+
         self.quantidade_processo = 0
         self.fila = Fila()
         self.memoria = Memoria()
@@ -73,19 +72,20 @@ class GerenciadorProcessos:
         self.gerenciador_arquivo = None
 
     def verificar_tamanho_processo(self):
-    
-        # verifica se todos os processos requisitam moduloMemoria sem extrapolar o valor 
-        # maximo que eles podem assumir, ou seja, 64 para processos de tempo real e 
-        # 960 para processos de Usuario, se requisitarem a mais eles sao excluidos
+        """
+            Verifica se todos os processos requisitam moduloMemoria sem extrapolar o valor
+            maximo que eles podem assumir, ou seja, 64 para processos de tempo real e
+            960 para processos de Usuario, se requisitarem a mais eles sao excluidos.
+        """
         lista_processo_analisados = []
     
         for processo in self.fila.lista_processo_pronto:       
             if (processo.bloco_memoria > TAMANHO_PROCESSO_REAL) and (processo.prioridade == 0):
                 pass
-            
+
             elif (processo.bloco_memoria > TAMANHO_PROCESSO_USUARIO) and (processo.prioridade != 0):
                 pass
-            
+
             else:        
                 lista_processo_analisados.append(processo)
        
@@ -93,13 +93,21 @@ class GerenciadorProcessos:
         self.quantidade_processo = len(lista_processo_analisados)
        
     def carregar_arquivos(self):
-        """
-            Responsavel por realizar leitura dos arquivos
-        """
-        arquivo_processo = "processes.txt"
-        arquivo_file = "files.txt"
+
+        # Responsavel por realizar leitura dos arquivos.
+
+        argtam = len(sys.argv)
+
+        if argtam > 2:
+            arquivo_processo = sys.argv[1]
+            arquivo_file = sys.argv[2]
+
+        else:
+
+            arquivo_processo = "processes.txt"
+            arquivo_file = "files.txt"
         
-        # abre o arquivo para leitura e gera um lista de processos.
+        # Abre o arquivo para leitura e gera um lista de processos.
         self.fila.lista_processo_pronto = self.leitor_arquvo.leitura_arquivo_processos(arquivo_processo)
         
         [lista_arquivos, lista_operacoes] = self.leitor_arquvo.leitura_arquivo_file(arquivo_file)
@@ -110,23 +118,26 @@ class GerenciadorProcessos:
             processo.setar_instrucao(lista_operacoes)
     
     def executar_fila_processo_pronto(self):
-        """
-            Responsável por executar_operacao o gerenciador de processos
-        """
+
+        # Responsável por executar_operacao o gerenciador de processos.
+
         quantidade_processo_usuario_executado = 0
         quantidade_processo_sistema_excutado = 0   
         tempo_execucao = 0
+
         while True:
             self.fila.inicializar_fila()
         
-            # ordena a fila de prioridade dos processos
+            # Ordena a fila de prioridade dos processos
             self.fila.ordenar_filas_prioridade(tempo_execucao)
-         
-            # altera prioridade dos processos que estão esperando muito para serem executado na fila de prioridade de
-            # usuário.
+
+            """
+                Altera prioridade dos processos que estão esperando muito para serem executado na fila de prioridade de
+                usuário.
+            """
             self.fila.alterar_fila_prioridade_usuario(tempo_execucao)
            
-            # adiciona os processos na fila de processos de real e de usuario
+            # Adiciona os processos na fila de processos de real e de usuario.
            
             lista_processo_0_espera = self.memoria.verificar_disponibilidade_memoria_real(self.fila, self.recurso)   
             lista_processo_1_espera = self.memoria.verificar_disponibilidade_memoria_recurso_usuario(self.fila,
@@ -224,6 +235,7 @@ class GerenciadorProcessos:
                 sequencia_execucao += 1
            
             self.impressao.imprimir_log()
+            self.fila.lista_processo_pronto.remove(processo)
             print("P{} return SIGINT".format(processo.pid))
             self.memoria.liberar_memoria_sistema(processo)
         

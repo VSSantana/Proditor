@@ -24,7 +24,7 @@ class LeitorArquvo:
             for linha in arquivo_processo:
                 lista_processos.append(proc.Processo([int(dado) for dado in linha.split(',')]))
         # arruma o vetor de moduloProcessos de menor tempo a maior tempo de inicializacao
-        lista_processos.sort(key=lambda dado:dado.tempo_inicializacao, reverse=False)
+        #lista_processos.sort(key=lambda dado:dado.tempo_inicializacao, reverse=False)
         # arruma o id de cada moduloProcessos com base no tempo de inicializacao.
         for processo in lista_processos:
             processo.pid = pid

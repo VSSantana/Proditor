@@ -29,7 +29,7 @@ class Fila:
              
     def ordenar_filas_prioridade(self, tempo_execucao):
         """
-            Método responsável por ordenar os processos processos 
+            Método responsável por ordenar os processos
             na fila de prioridade, em ordem crescente de menor para maior.     
         """
         for processo in self.lista_processo_pronto:          
