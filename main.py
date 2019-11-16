@@ -1,4 +1,3 @@
-
 """
     Módulo de inicialiazação do pseudoSO
 """

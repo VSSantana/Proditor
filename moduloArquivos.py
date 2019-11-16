@@ -1,5 +1,5 @@
 """
-    Classe responsavel por gerenciar os arquivos em disco.
+    Classe responsável por gerenciar os arquivos em disco.
     Trata as operações create e delete sobre os arquivos.
 """
 
@@ -7,35 +7,41 @@
 class Arquivo:
     
     """
-        Classe responsável por carregamento de dados dos arquivos.
+        Classe responsável pelo carregamento de dados dos arquivos.
     """
 
     def __init__(self, nome_arquivo=0, posicao_bloco=0, tamanho=0, criador=None):
+
         """
-            Construtor da classe de Arquivo
+            Construtor da classe Arquivo.
         """
+
         self.nome_arquivo = nome_arquivo
         self.posicao_bloco = posicao_bloco
         self.tamanho = tamanho
         self.criador = criador
 
     def __str__(self):
+
         """
-            Método responsável por retornar uma string mensagem
+            Método responsável por retornar uma string mensagem.
         """
+
         return "| {} ".format(self.nome_arquivo)
 
 
 class GerenciadorArquivos:
     
     """
-        Classe responsável por manipulação de arquivos criar e deletar.
+        Classe responsável por manipulação, criação e deleção de arquivos.
     """
     
     def __init__(self, lista_arquivos):
+
         """
-            Construtor da classe de GerenciadorArquivos
+            Construtor da classe GerenciadorArquivos.
         """
+
         self.lista_blocos_disco = []
         self.tamanho_blocos_disco = int(lista_arquivos[0])
         
@@ -48,34 +54,38 @@ class GerenciadorArquivos:
             for i in range(0, len(self.lista_blocos_disco)):
                 posicao_inicial = int(linha[1])
                 posicao_final = posicao_inicial + int(linha[2]) - 1
-                if (i >= posicao_inicial)and (i <= posicao_final):
+                if (i >= posicao_inicial) and (i <= posicao_final):
                     self.lista_blocos_disco[i].posicao_bloco = posicao_inicial
                     self.lista_blocos_disco[i].nome_arquivo = linha[0]
                     self.lista_blocos_disco[i].tamanho = posicao_final - posicao_inicial + 1
     
     def __str__(self):
+
         """
-            Método responsável por retornar uma string mensagem
+            Método responsável por retornar uma string mensagem.
         """
+
         string = "MAPA DOS BLOCOS DO DISCO:\n\t"
         for bloco in self.lista_blocos_disco:
             string += str(bloco)
         string += "|"
         return string
 
-    def executar_operacao(self, processo, sequencia_geral,):
+    def executar_operacao(self, processo, sequencia_geral):
+
         """
-            Metodo responsável por executar_operacao as intrucoes do processo com base na 
-            execucao atual e posicao do lista de instrucoes.
+            Método responsável por executar_operacao as instruções do processo com base na
+            execucao atual e posicao da lista de instruções.
             Retorna uma string mensagem de sucesso/falha da operação executada.
         """
+
         mensagem = ""
         dispobilidade = 0
       
         operacao = processo.lista_instrucoes[sequencia_geral][1]
         nome_arquivo = processo.lista_instrucoes[sequencia_geral][2]
         
-        if operacao == 0:  # Criar arquivo
+        if operacao == 0:  # Criar arquivo.
             tamanho_arquivo = processo.lista_instrucoes[sequencia_geral][3]
             numero_operacao_processo_atual = processo.lista_instrucoes[sequencia_geral][4]
 
@@ -120,13 +130,13 @@ class GerenciadorArquivos:
                     else:
                         mensagem = "P{} instruction {}".format(processo.pid, numero_operacao_processo_atual)
                         mensagem += " - Falha!\n"
-                        mensagem += "O processo {} não pode deletar o arquivo {} porque não existe esse arquivo.\n".\
-                            format(processo.pid, nome_arquivo)
+                        mensagem += "O processo {} não pode deletar o arquivo {} porque não é criador do arquivo." \
+                                    "\n".format(processo.pid, nome_arquivo)
                 else:
                     mensagem = "P{} instruction {}".format(processo.pid, numero_operacao_processo_atual)
                     mensagem += " - Falha!\n"
-                    mensagem += "O processo {}: não pode deletar o arquivo {} porque não existe esse arquivo.\n".\
-                        format(processo.pid, nome_arquivo)
+                    mensagem += "O processo {}: não pode deletar o arquivo {} porque não existe esse arquivo." \
+                                "\n".format(processo.pid, nome_arquivo)
             return mensagem
         else:
             return "Operacao nao existente"
