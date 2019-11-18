@@ -121,14 +121,18 @@ class Memoria:
         return False
 
     def liberar_memoria_sistema(self, processo):
+
         """
             Metodo responsável por deletar o processo referenciado
         """
+
         self.memoria[processo.posicao_bloco_disco:processo.posicao_bloco_disco + processo.bloco_memoria] = \
             [None] * processo.bloco_memoria
 
     def liberar_memoria_usuario(self):
+
         """
             Metodo responsável por limpar a memoria de usuario
         """
+
         self.memoria[TAMANHO_PROCESSO_REAL:] = TAMANHO_PROCESSO_USUARIO * [None]

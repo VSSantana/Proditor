@@ -167,7 +167,7 @@ class GerenciadorProcessos:
             lista_processo_1_espera = self.memoria.verificar_disponibilidade_memoria_recurso_usuario(self.fila,
                                                                                                      self.recurso,
                                                                                                      tipo_lista=1)
-            print(lista_processo_1_espera)
+            #print(lista_processo_1_espera)
             lista_processo_2_espera = self.memoria.verificar_disponibilidade_memoria_recurso_usuario(self.fila,
                                                                                                      self.recurso,
                                                                                                      tipo_lista=2)
@@ -193,14 +193,6 @@ class GerenciadorProcessos:
             
             # Incrementa o tempo de execução do pseudo-SO.
             tempo_execucao += 1
-            
-            if len(lista_processo_0_espera) > 0 or len(lista_processo_1_espera) > 0 or len(lista_processo_2_espera) > \
-                    0 or len(lista_processo_3_espera) > 0:
-                self.fila.lista_processo_pronto = []
-                self.fila.lista_processo_pronto.extend(lista_processo_0_espera)
-                self.fila.lista_processo_pronto.extend(lista_processo_1_espera)
-                self.fila.lista_processo_pronto.extend(lista_processo_2_espera)
-                self.fila.lista_processo_pronto.extend(lista_processo_3_espera)
              
             if self.quantidade_processo == (quantidade_processo_sistema_excutado +
                                             quantidade_processo_usuario_executado):
@@ -217,7 +209,7 @@ class GerenciadorProcessos:
     def executar_operacao_processo(self, lista_processo_pronto):
 
         """
-            Responsável por executar_operacao processos de tempo-real
+            Responsável por executar_operacao processos de tempo-real.
         """
 
         quantidade_processo_executado = 0
