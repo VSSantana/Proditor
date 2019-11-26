@@ -68,15 +68,18 @@ class Fila:
             if processo.prioridade == 2 and not self.lista_processo_2:
 
                 if processo.tempo_inicializacao + 10 <= tempo_execucao:
-                    self.lista_processo_1.append(processo)
                     self.lista_processo_2.remove(processo)
+                    processo.prioridade = 1
+                    self.lista_processo_1.append(processo)
 
                 elif processo.tempo_inicializacao + 20 < tempo_execucao:
-                    self.lista_processo_1.append(processo)
                     self.lista_processo_2.remove(processo)
+                    self.lista_processo_1.append(processo)
 
             if processo.prioridade == 3 and not self.lista_processo_3 and existe_processo_prioridade_2 == False:
 
                 if processo.tempo_inicializacao + 10 <= tempo_execucao:
-                    self.lista_processo_2.append(processo)
                     self.lista_processo_3.remove(processo)
+                    processo.prioridade = 2
+                    self.lista_processo_2.append(processo)
+
